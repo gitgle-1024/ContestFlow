@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sizaif.emsdemo.mapper.Contest.ContestMapper">
+
+    <!--映射表-->
+    <resultMap id="BaseResultMap" type="com.sizaif.emsdemo.pojo.Contest.Contest" >
+        <id column="cid" property="Cid" />
+        <result column="title" property="Title"/>
+        <result column="level" property="Level"  />
+        <result column="memo" property="Memo"  />
+        <result column="creatorId" property="CreatorId"  />
+        <result column="createDate" property="CreateDate"  />
+        <result column="modifyDate" property="ModifyDate"  />
+        <result column="startTime" property="StartTime"  />
+        <result column="endTime" property="EndTime"  />
+        <result column="isEnabled" property="isEnabled"  />
+        <result column="length" property="Length"  />
+        <result column="type" property="Type"  />
+        <result column="tag" property="Tag"  />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        cid, title, level, memo, creatorId, length, createDate,modifyDate, startTime,endTime,isEnabled,type,tag
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from saishiguanli.contest
+        where cid = #{id,jdbcType=INTEGER}
+    </select>
+    <!--动态插入-->
+    <insert id="insertSelective" parameterType="Contest" >
+        insert into saishiguanli.contest
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="Cid != null" >
+                cid,
+            </if>
+            <if test="Title != null" >
+                title,
+            </if>
+            <if test="Level != null" >
+                level,
+            </if>
+            <if test="Memo != null" >
+                memo,
+            </if>
+            <if test="CreatorId != null" >
+                creatorId,
+            </if>
+            <if test="Length != null" >
+                length,
+            </if>
+            <if test="CreateDate != null" >
+                createDate,
+            </if>
+            <if test="ModifyDate != null" >
+                modifyDate,
+            </if>
+            <if test="StartTime != null" >
+                startTime,
+            </if>
+            <if test="EndTime != null" >
+                endTime,
+            </if>
+            <if test="isEnabled != null" >
+                isEnabled,
+            </if>
+            <if test="Type != null" >
+                type,
+            </if>
+            <if test="Tag != null" >
+                tag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="Cid != null" >
+                #{Cid,jdbcType=INTEGER},
+            </if>
+            <if test="Title != null" >
+                #{Title,jdbcType=VARCHAR},
+            </if>
+            <if test="Level != null" >
+                #{Level,jdbcType=VARCHAR},
+            </if>
+            <if test="Memo != null" >
+                #{Memo,jdbcType=VARCHAR},
+            </if>
+            <if test="CreatorId != null" >
+                #{CreatorId},
+            </if>
+            <if test="Length != null" >
+                #{Length},
+            </if>
+            <if test="CreateDate != null" >
+                #{CreateDate},
+            </if>
+            <if test="ModifyDate != null" >
+                #{ModifyDate},
+            </if>
+            <if test="StartTime != null" >
+                #{StartTime},
+            </if>
+            <if test="EndTime != null" >
+                #{EndTime},
+            </if>
+            <if test="isEnabled != null" >
+                #{isEnabled},
+            </if>
+            <if test="Type != null" >
+                #{Type},
+            </if>
+            <if test="Tag != null" >
+                #{Tag},
+            </if>
+        </trim>
+    </insert>
+
+    <!--动态更新-->
+    <update id="updateByPrimaryKeySelective" parameterType="Contest" >
+        update saishiguanli.contest
+        <set >
+            <if test="Title != null" >
+                title = #{Title},
+            </if>
+            <if test="Level != null" >
+                level = #{Level},
+            </if>
+            <if test="Memo != null" >
+                memo = #{Memo},
+            </if>
+            <if test="CreatorId != null" >
+                creatorId = #{CreatorId},
+            </if>
+            <if test="Length != null" >
+                length = #{Length},
+            </if>
+            <if test="CreateDate != null" >
+                createDate = #{CreateDate},
+            </if>
+            <if test="ModifyDate != null" >
+                modifyDate = #{ModifyDate},
+            </if>
+            <if test="StartTime != null" >
+                startTime = #{StartTime},
+            </if>
+            <if test="EndTime != null" >
+                endTime = #{EndTime},
+            </if>
+            <if test="isEnabled != null" >
+                isEnabled = #{isEnabled},
+            </if>
+            <if test="Type != null" >
+                type = #{Type},
+            </if>
+            <if test="Tag != null" >
+                tag = #{Tag},
+            </if>
+        </set>
+        where Cid = #{Cid}
+    </update>
+
+    <!--=Start findAll 查找所有比赛列表 返回contest 类型-->
+    <select id="getAllContest" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from saishiguanli.contest
+    </select>
+
+    <!--contestVO 映射表-->
+    <resultMap id="ContestVoMap" type="com.sizaif.emsdemo.dto.ContestVO">
+        <id column="cid" property="Cid"  />
+        <result column="title" property="Title" />
+        <result column="level" property="Level" />
+        <result column="tag" property="Tag" />
+        <result column="memo" property="Memo" />
+        <result column="length" property="Length" />
+        <result column="creatorId" property="CreatorId" />
+        <result column="createDate" property="CreateDate" />
+        <result column="modifyDate" property="ModifyDate" />
+        <result column="startTime" property="StartTime" />
+        <result column="endTime" property="EndTime" />
+        <result column="isEnabled" property="isEnabled" />
+        <result column="type" property="Type" />
+    </resultMap>
+    <!--start 查询所有比赛列表 带有筛选的, 返回类型 contestVO-->
+    <select id="getAllContestVO" resultMap="ContestVoMap" parameterType="map">
+        SELECT
+        contest.*
+        FROM contest
+        <if test="level != null">
+            WHERE contest.level = #{level}
+        </if>
+        <if test="type != null" >
+            WHERE saishiguanli.contest.type = #{type}
+        </if>
+        <if test="isEnabled != null" >
+            WHERE  saishiguanli.contest.isEnabled = #{isEnabled}
+        </if>
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from saishiguanli.contest
+        where Cid = #{id}
+    </delete>
+
+
+    <!--单人赛比赛映射表-->
+    <!-- 折中一下  把 审核是否通过 放到 memberVo 的 isEnabled 里-->
+    <resultMap id="ContestMemberResultMap" type="com.sizaif.emsdemo.dto.ContestVO" >
+        <id column="c_id" property="Cid"  />
+        <result column="c_title" property="Title"  />
+        <result column="c_level" property="Level"  />
+<!--        <result column="memo" property="Memo"  />-->
+<!--        <result column="creatorId" property="CreatorId"  />-->
+<!--        <result column="createDate" property="CreateDate"  />-->
+<!--        <result column="modifyDate" property="ModifyDate"  />-->
+<!--        <result column="startTime" property="StartTime"  />-->
+<!--        <result column="endTime" property="EndTime"  />-->
+<!--        <result column="cEnabled" property="isEnabled"  />-->
+<!--        <result column="length" property="Length"  />-->
+        <result column="c_type" property="Type"  />
+        <collection property="memberList" ofType="com.sizaif.emsdemo.dto.MemberVO"  >
+            <id column="m_id" property="id"/>
+<!--            <result column="memberRank_id" property="memberRankId"/>-->
+<!--            <result column="address" property="address"/>-->
+<!--            <result column="birth" property="birth"/>-->
+<!--            <result column="email" property="email"/>-->
+<!--            <result column="gender" property="gender"/>-->
+<!--            <result column="phone" property="phone"/>-->
+            <result column="m_truename" property="truename"/>
+            <result column="m_school" property="school"/>
+            <result column="m_isEnabled" property="isEnabled"/>
+<!--            <result column="image" property="image"/>-->
+        </collection>
+    </resultMap>
+
+    <!--组队赛比赛映射表-->
+    <resultMap id="ContestTeamResultMap" type="com.sizaif.emsdemo.dto.ContestVO">
+        <id column="c_id" property="Cid"  />
+        <result column="c_title" property="Title"  />
+        <result column="c_level" property="Level"  />
+<!--        <result column="memo" property="Memo"  />-->
+<!--        <result column="creatorId" property="CreatorId"  />-->
+<!--        <result column="createDate" property="CreateDate"  />-->
+<!--        <result column="modifyDate" property="ModifyDate"  />-->
+<!--        <result column="startTime" property="StartTime"  />-->
+<!--        <result column="endTime" property="EndTime"  />-->
+        <result column="c_Enabled" property="isEnabled"  />
+<!--        <result column="length" property="Length"  />-->
+        <result column="type" property="Type"  />
+<!--        <result column="tag" property="Tag"  />-->
+        <collection property="teamList" ofType="com.sizaif.emsdemo.dto.TeamVO">
+            <id column="t_id" property="id"/>
+            <result column="t_name" property="name"/>
+            <result column="t_school" property="school"/>
+<!--            <result column="captain_id" property="captainId"/>-->
+<!--            <result column="createDate" property="createDate"/>-->
+<!--            <result column="modifyDate" property="modifyDate"/>-->
+            <result column="t_Enabled" property="isEnabled"/>
+        </collection>
+    </resultMap>
+    
+    <select id="findContestByMemberId" parameterType="int" resultMap="ContestMemberResultMap">
+        SELECT
+        c.cid c_id,
+        c.title c_title,
+        c.level c_level,
+        c.type c_type,
+        m.id m_id,
+        m.truename m_truename,
+        m.school m_school,
+        cm.isEnabled c_Enabled
+        FROM saishiguanli.contest c
+        LEFT JOIN saishiguanli.contest_member cm ON cm.contest_id = c.cid
+        LEFT JOIN saishiguanli.member m ON m.id = cm.member_id
+        WHERE m.id = #{id}
+        AND c.isEnabled = true
+    </select>
+
+    <select id="findContestByTeamId" parameterType="int" resultMap="ContestTeamResultMap">
+        SELECT
+        c.cid c_id,
+        c.title c_title,
+        c.level c_level,
+        c.type c_type,
+        t.id t_id,
+        t.name t_name,
+        t.school t_school,
+        ct.isEnabled c_Enabled
+        FROM saishiguanli.contest c
+        LEFT JOIN saishiguanli.contest_team ct ON ct.contest_id = c.cid
+        LEFT JOIN saishiguanli.team t ON t.id = ct.team_id
+        WHERE t.id = #{id}
+        AND c.isEnabled = true
+    </select>
+
+
+    <select id="findMembersByContestId" parameterType="int" resultMap="ContestMemberResultMap">
+        SELECT
+        c.cid c_id,
+        c.title c_title,
+        c.level c_level,
+        c.type c_type,
+        m.id m_id,
+        m.truename m_truename,
+        m.school m_school,
+        cm.isEnabled m_isEnabled
+        FROM saishiguanli.contest c
+        LEFT JOIN saishiguanli.contest_member cm ON cm.contest_id = c.cid
+        LEFT JOIN saishiguanli.member m ON m.id = cm.member_id
+        WHERE c.cid = #{id}
+    </select>
+    
+    <select id="findTeamsByContestId" parameterType="int" resultMap="ContestTeamResultMap">
+        SELECT
+        c.cid c_id,
+        c.title c_title,
+        c.level c_level,
+        c.type c_type,
+        t.id t_id,
+        t.name t_name,
+        t.school t_school,
+        ct.isEnabled t_Enabled
+        FROM saishiguanli.contest c
+        LEFT JOIN saishiguanli.contest_team ct ON ct.contest_id = c.cid
+        LEFT JOIN saishiguanli.team t ON t.id = ct.team_id
+        WHERE c.cid = #{id}
+    </select>
+</mapper>

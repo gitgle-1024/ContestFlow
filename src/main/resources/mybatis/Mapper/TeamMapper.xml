@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sizaif.emsdemo.mapper.Team.TeamMapper">
+    <!--映射表-->
+    <resultMap id="BaseResultMap" type="com.sizaif.emsdemo.pojo.Contest.Team" >
+        <id column="id" property="id"/>
+        <result column="name" property="name"  />
+        <result column="school" property="school"  />
+        <result column="captain_id" property="captainId"  />
+        <result column="createDate" property="createDate"  />
+        <result column="modifyDate" property="modifyDate" />
+        <result column="isEnabled" property="isEnabled"  />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, name, school, captain_id,createDate,modifyDate,isEnabled
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from saishiguanli.team
+        where id = #{id}
+    </select>
+
+    <!--动态插入-->
+    <insert id="insertSelective" parameterType="Team" >
+        insert into saishiguanli.team
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="school != null" >
+                school,
+            </if>
+            <if test="captainId != null" >
+                captain_id,
+            </if>
+            <if test="createDate != null" >
+                createDate,
+            </if>
+            <if test="modifyDate != null" >
+                modifyDate,
+            </if>
+            <if test="isEnabled != null" >
+                isEnabled,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="school != null" >
+                #{school,jdbcType=VARCHAR},
+            </if>
+            <if test="captainId != null" >
+                #{captainId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                #{modifyDate},
+            </if>
+            <if test="isEnabled != null" >
+                #{isEnabled},
+            </if>
+        </trim>
+    </insert>
+
+    <!--动态更新-->
+    <update id="updateByPrimaryKeySelective" parameterType="Team" >
+        update saishiguanli.team
+        <set >
+            <if test="name != null" >
+                name = #{name},
+            </if>
+            <if test="school != null" >
+                school = #{school},
+            </if>
+            <if test="Memo != null" >
+                memo = #{Memo},
+            </if>
+            <if test="captainId != null" >
+                captain_id = #{captainId},
+            </if>
+            <if test="createDate != null" >
+                createDate = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modifyDate = #{modifyDate},
+            </if>
+            <if test="isEnabled != null" >
+                isEnabled = #{isEnabled},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getAllTeam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from saishiguanli.team
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from saishiguanli.team
+        where id = #{id}
+    </delete>
+
+    <select id="getContestTeamVOListByCid" parameterType="int" resultMap="TeamInfoResultMap">
+        SELECT
+        t.id t_id,
+        t.name t_name,
+        t.school t_school,
+        t.captain_id t_captain_id,
+        m.id m_id,
+        m.age m_age,
+        m.weight m_weight,
+        m.height m_height,
+        m.address m_address,
+        m.birth m_birth,
+        m.gender m_gender,
+        m.phone m_phone,
+        m.truename m_truename,
+        m.school m_school,
+        m.image m_image
+        FROM team t
+        LEFT JOIN team_member tm ON tm.team_id = t.id
+        LEFT JOIN member m ON tm.member_id = m.id
+        LEFT JOIN contest_team ct ON ct.team_id = t.id
+        LEFT JOIN contest c ON c.cid = ct.contest_id
+        WHERE c.cid = #{cid} AND ct.isEnabled = 1
+    </select>
+
+    <!--队伍成员信息映射表-->
+    <resultMap id="TeamInfoResultMap" type="com.sizaif.emsdemo.dto.TeamVO" >
+        <id column="t_id" property="id"/>
+        <result column="t_name" property="name"/>
+        <result column="t_school" property="school"/>
+        <result column="t_captain_id" property="captainId"/>
+        <result column="t_createDate" property="createDate"/>
+        <result column="t_modifyDate" property="modifyDate"/>
+        <result column="t_isEnabled" property="isEnabled"/>
+        <collection property="teamMember" ofType="com.sizaif.emsdemo.dto.MemberVO">
+            <result column="m_id" property="id"/>
+            <result column="m_age" property="age"/>
+            <result column="m_weight" property="weight"/>
+            <result column="m_height" property="height"/>
+            <result column="m_address" property="address"/>
+            <result column="m_birth" property="birth"/>
+            <result column="m_gender" property="gender"/>
+            <result column="m_phone" property="phone"/>
+            <result column="m_truename" property="truename"/>
+            <result column="m_school" property="school"/>
+            <result column="m_image" property="image"/>
+        </collection>
+    </resultMap>
+
+    <!--=Start getUserPerms 根据用户ID查找权限树列表-->
+    <select id="getTeamMemberInfo" resultMap="TeamInfoResultMap" parameterType="int">
+        SELECT
+        t.id t_id,
+        t.name t_name,
+        t.school t_school,
+        t.captain_id t_captain_id,
+        t.createDate t_createDate,
+        t.modifyDate t_modifyDate,
+        t.isEnabled t_isEnabled,
+        m.id m_id,
+        m.age m_age,
+        m.weight m_weight,
+        m.height m_height,
+        m.address m_address,
+        m.birth m_birth,
+        m.gender m_gender,
+        m.phone m_phone,
+        m.truename m_truename,
+        m.school m_school,
+        m.image m_image
+        FROM saishiguanli.team t
+        LEFT JOIN saishiguanli.team_member tm ON tm.team_id = t.id
+        LEFT JOIN saishiguanli.member m ON m.id = tm.member_id
+        WHERE t.id  = #{teamid}
+    </select>
+    <!--=End getUserPerms 根据用户ID查找权限树列表-->
+
+
+</mapper>

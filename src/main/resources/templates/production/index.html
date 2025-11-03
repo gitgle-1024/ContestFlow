@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="title='主界面'">
+<!--head-->
+<header th:replace="~{production/Commons/header::headerFragment(${title})}"></header>
+<head>
+  <link th:href="@{/build/css/announce.css}" rel="stylesheet">
+</head>
+<!--head-->
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+
+          <!-- menu_main -->
+          <div th:replace="~{production/commons/common::menu_main}"></div>
+          <!-- menu_main-->
+
+        <!-- top navigation -->
+         <div th:replace="~{production/commons/common::top_navigation}"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+            <div class="row tile_count box2">
+              <div class="winBox col-md-12 col-sm-4 col-xs-6 tile_stats_count">
+                <ul class="scroll" >
+                  <li th:each="announce:${Announce}">
+                    <a class="count" href="#" th:text="${announce.getCreatorName()}+' : '+${announce.getMemo()}"></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          <!-- /top tiles -->
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>关于ACM <small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="bs-example" data-example-id="simple-jumbotron">
+                    <div class="jumbotron" style="background-color:#f5f5f5">
+                      <h1>ACM国际大学生程序设计竞赛</h1>
+                      <h2>一.简介</h2>
+                      <p>
+                        国际大学生程序设计竞赛（英文全称：International Collegiate Programming Contest（简称ICPC））是由国际计算机协会（ACM）主办的，一项旨在展示大学生创新能力、团队精神和在压力下编写程序、分析和解决问题能力的年度竞赛。经过近40年的发展，ACM国际大学生程序设计竞赛已经发展成为全球最具影响力的大学生程序设计竞赛。
+                      </p>
+                      <h2>二.队伍组成</h2>
+                      <p>组队参赛，每个参赛队由3名队员和1名教练组成，参赛队员必须是所属高校在籍的本科生、专科生，教练必须是所属高校在职教师，教练有责任保证参赛成员身份的真实性。</p>
+                      <h2>三.竞赛方式</h2>
+                      <p>1.参赛队伍最多由三名参赛队员组成。</p>
+                      <p>2.竞赛中命题10题左右，试题描述为英文，比赛时间为5个小时，前四个小时可以实时看到排名，最后一小时封榜，无法看到排名。</p>
+                      <p>3.竞赛可以使用的语言：Java, C, C++, Kotlin 和 Python。</p>
+                      <p>4.重点考察选手的算法和程序设计能力，不考察实际工程中常用的系统编程，多线程编程等等；</p>
+                      <p>5.选手可携带任何非电子类资料，包括书籍和打印出来的程序等，部分赛区会对选手携带的纸质资料做限制。</p>
+                      <p>6.评委负责将结果（正确或出错的类型）通过网络尽快返回给选手，除此之外不提供任何额外帮助；</p>
+                      <p>7.每个题目对应一种颜色的气球，通过该题目的队伍会得到对应颜色气球。每道题目第一支解决掉它的队还会额外获得一个“FIRST PROBLEM SOLVED”的气球。</p>
+                      <p>8.提交反馈：包括 Compilation Error（编译错误）、Runtime Error（运行错误）、Wrong Answer（答案错误）、Time Limit Exceeded（超时）、Accepted（正确）等。        提交反馈：包括 Compilation Error（编译错误）、Runtime Error（运行错误）、Wrong Answer（答案错误）、Time Limit Exceeded（超时）、Accepted（正确）等。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer th:replace="~{production/commons/common::footer_content}"></footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+    <!-- Bootstrap -->
+    <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <!-- FastClick -->
+    <script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+    <!-- NProgress -->
+    <script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+    <!-- Chart.js -->
+    <script th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
+    <!-- gauge.js -->
+    <script th:src="@{/vendors/gauge.js/dist/gauge.min.js}"></script>
+    <!-- bootstrap-progressbar -->
+    <script th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
+    <!-- iCheck -->
+    <script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+    <!-- Skycons -->
+    <script th:src="@{/vendors/skycons/skycons.js}"></script>
+    <!-- Flot -->
+    <script th:src="@{/vendors/Flot/jquery.flot.js}"></script>
+    <script th:src="@{/vendors/Flot/jquery.flot.pie.js}"></script>
+    <script th:src="@{/vendors/Flot/jquery.flot.time.js}"></script>
+    <script th:src="@{/vendors/Flot/jquery.flot.stack.js}"></script>
+    <script th:src="@{/vendors/Flot/jquery.flot.resize.js}"></script>
+    <!-- Flot plugins -->
+    <script th:src="@{/vendors/flot.orderbars/js/jquery.flot.orderBars.js}"></script>
+    <script th:src="@{/vendors/flot-spline/js/jquery.flot.spline.min.js}"></script>
+    <script th:src="@{/vendors/flot.curvedlines/curvedLines.js}"></script>
+    <!-- DateJS -->
+    <script th:src="@{/vendors/DateJS/build/date.js}"></script>
+    <!-- JQVMap -->
+    <script th:src="@{/vendors/jqvmap/dist/jquery.vmap.js}"></script>
+    <script th:src="@{/vendors/jqvmap/dist/maps/jquery.vmap.world.js}"></script>
+    <script th:src="@{/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script th:src="@{/vendors/moment/min/moment.min.js}"></script>
+    <script th:src="@{/vendors/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script th:src="@{/build/js/custom.min.js}"></script>
+
+    <script>
+      $(function() {
+        var num = 0;
+        function goLeft() {
+          //750是根据你给的尺寸，可变的
+          if (num == -750) {
+            num = 0;
+          }
+          num -= 1;
+          $(".scroll").css({
+            left: num
+          })
+        }
+        //设置滚动速度
+        var timer = setInterval(goLeft, 25);
+        //设置鼠标经过时滚动停止
+        $(".box2").hover(function() {
+                  clearInterval(timer);
+                },
+                function() {
+                  timer = setInterval(goLeft, 20);
+                })
+      })
+    </script>
+  </body>
+</html>

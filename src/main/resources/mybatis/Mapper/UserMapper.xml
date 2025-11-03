@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sizaif.emsdemo.mapper.User.UserMapper">
+
+
+    <!--一对一(多对一关系) 用association-->
+    <!--映射表-->
+    <resultMap id="MemberUserMap" type="com.sizaif.emsdemo.dto.MemberVO">
+        <!--column数据库中的字段，property实体类中的属性-->
+        <id column="m_id" property="id"/>
+        <result column="m_age" property="age"/>
+        <result column="m_weight" property="weight"/>
+        <result column="m_height" property="height"/>
+        <result column="m_address" property="address"/>
+        <result column="m_birth" property="birth"/>
+        <result column="m_email" property="email"/>
+        <result column="m_gender" property="gender"/>
+        <result column="m_phone" property="phone"/>
+        <result column="m_truename" property="truename"/>
+        <result column="m_school" property="school"/>
+        <result column="m_image" property="image"/>
+        <result column="m_isEnabled" property="isEnabled"/>
+
+        <!--关联查询 property users对应数据库中表明 javaType对应到实体类名字-->
+        <!--association-->
+        <collection property="users" javaType="com.sizaif.emsdemo.dto.UserVO">
+            <id column="u_id" property="id"/>
+            <result column="u_createDate" property="createDate"/>
+            <result column="u_modifyDate" property="modifyDate"/>
+            <result column="u_isEnabled" property="isEnabled"/>
+            <result column="u_isLocked" property="isLocked"/>
+            <result column="u_lastLoginDate" property="lastLoginDate"/>
+            <result column="u_lastLoginIp" property="lastLoginIp"/>
+            <result column="u_lockDate" property="lockDate"/>
+            <result column="u_uname" property="name"/>
+            <result column="u_encodePassword" property="password"/>
+            <result column="u_role" property="role"/>
+            <result column="u_type" property="type"/>
+            <collection property="userRoles" javaType="com.sizaif.emsdemo.pojo.User.UserRoleKey">
+                <result column="user_id" property="userId" javaType="java.lang.Integer"/>
+                <result column="role_id" property="roleId" javaType="java.lang.Integer"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--user映射表-->
+    <resultMap id="UsersMap" type="com.sizaif.emsdemo.pojo.User.Users">
+        <!--column数据库中的字段，property实体类中的属性-->
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="createDate" property="createDate" jdbcType="VARCHAR" />
+        <result column="modifyDate" property="modifyDate" jdbcType="VARCHAR" />
+        <result column="isEnabled" property="isEnabled" jdbcType="INTEGER"/>
+        <result column="isLocked" property="isLocked" jdbcType="INTEGER"/>
+        <result column="lastLoginDate" property="lastLoginDate" jdbcType="VARCHAR" />
+        <result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR" />
+        <result column="lockDate" property="lockDate" jdbcType="VARCHAR" />
+        <result column="uname" property="name" jdbcType="VARCHAR"/>
+        <result column="encodePassword" property="password" jdbcType="VARCHAR"/>
+        <result column="role" property="role" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="User_No_Password_List" >
+        users.id u_id,
+        users.createDate u_createDate,
+        users.modifyDate u_modifyDate,
+        users.isEnabled u_isEnabled,
+        users.isLocked u_isLocked,
+        users.lastLoginDate u_lastLoginDate,
+        users.lastLoginIp u_lastLoginIp,
+        users.lockDate u_lockDate,
+        users.uname u_uname,
+        users.role u_role,
+        users.type u_type
+    </sql>
+
+    <!--关联表查询-->
+    <select id="queryAllUserMemberRoleList" resultMap="MemberUserMap">
+        SELECT
+        m.id m_id,
+        m.age m_age,
+        m.weight m_weight,
+        m.height m_height,
+        m.address m_address,
+        m.birth m_birth,
+        m.email m_email,
+        m.gender m_gender,
+        m.phone m_phone,
+        m.truename m_truename,
+        m.school m_school,
+        m.image m_image,
+        m.isEnabled m_isEnabled,
+        ur.*,
+        <include refid="User_No_Password_List" />
+        FROM member m, users,role r
+        LEFT JOIN users_role ur ON ur.role_id = r.id
+        WHERE m.id = users.id AND ur.user_id= users.id
+        AND users.type = "个人账户"
+    </select>
+
+    
+    <select id="queryAllUserList" resultMap="UsersMap">
+        SELECT
+          saishiguanli.users.*
+        FROM
+          users
+    </select>
+
+    <select id="queryOneUserMemberById" resultMap="MemberUserMap" parameterType="int">
+        SELECT
+        m.id m_id,
+        m.age m_age,
+        m.weight m_weight,
+        m.height m_height,
+        m.address m_address,
+        m.birth m_birth,
+        m.email m_email,
+        m.gender m_gender,
+        m.phone m_phone,
+        m.truename m_truename,
+        m.school m_school,
+        m.image m_image,
+        m.isEnabled m_isEnabled,
+        ur.*,
+        <include refid="User_No_Password_List" />
+        FROM member m, users,role r
+        LEFT JOIN users_role ur ON ur.role_id = r.id
+        WHERE m.id = users.id AND ur.user_id= users.id AND users.id = #{id}
+        AND users.type = "个人账户"
+    </select>
+
+    <select id="queryOneUserById" resultMap="UsersMap">
+        SELECT
+          saishiguanli.users.*
+        FROM
+          users
+        WHERE users.id = #{id}
+    </select>
+
+
+    <select id="queryUserByName"  parameterType="java.lang.String" resultMap="UsersMap">
+        SELECT saishiguanli.users.* FROM saishiguanli.users
+        WHERE
+          saishiguanli.users.uname = #{name};
+    </select>
+
+    <!--动态sql插入-->
+    <!--keyColum-数据库中主键名称, keyProperty-实体类中主键名称,useGeneratedKeys="true" 拿到主键-->
+    <insert id="addUserSelective" parameterType="com.sizaif.emsdemo.pojo.User.Users" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO saishiguanli.users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">
+                createDate,
+            </if>
+            <if test="modifyDate != null">
+                modifyDate,
+            </if>
+            <if test="isEnabled != null">
+                isEnabled,
+            </if>
+            <if test="isLocked != null">
+                isLocked,
+            </if>
+            <if test="lastLoginDate != null">
+                lastLoginDate,
+            </if>
+            <if test="lastLoginIp != null">
+                lastLoginIp,
+            </if>
+            <if test="lockDate != null">
+                lockDate,
+            </if>
+            <if test="name != null">
+                uname,
+            </if>
+            <if test="password != null">
+                encodePassword,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">
+                #{createDate},
+            </if>
+            <if test="modifyDate != null">
+                #{modifyDate},
+            </if>
+            <if test="isEnabled != null">
+                #{isEnabled},
+            </if>
+            <if test="isLocked != null">
+                #{isLocked},
+            </if>
+            <if test="lastLoginDate != null">
+                #{lastLoginDate},
+            </if>
+            <if test="lastLoginIp != null">
+                #{lastLoginIp},
+            </if>
+            <if test="lockDate != null">
+                #{lockDate},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="role != null">
+                #{role},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--动态sql更新User-->
+    <update id="updateUserSelective" parameterType="com.sizaif.emsdemo.pojo.User.Users" >
+        update saishiguanli.users
+        <trim prefix="set" suffixOverrides=",">
+            <if test="createDate != null">createDate=#{createDate},</if>
+            <if test="modifyDate != null">modifyDate=#{modifyDate},</if>
+            <if test="isEnabled != null">isEnabled=#{isEnabled},</if>
+            <if test="isLocked != null">isLocked=#{isLocked},</if>
+            <if test="lastLoginDate != null">lastLoginDate=#{lastLoginDate},</if>
+            <if test="lastLoginIp != null">lastLoginIp=#{lastLoginIp},</if>
+            <if test="lockDate != null">lockDate=#{lockDate},</if>
+            <if test="name != null"> uname=#{name},</if>
+            <if test="password != null"> encodePassword=#{password},</if>
+            <if test="role != null"> role=#{role},</if>
+            <if test="type != null"> type=#{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!--删除用户By ID-->
+    <delete id="deleteUserById" parameterType="int">
+        delete from saishiguanli.users where id= #{id}
+    </delete>
+
+
+
+</mapper>

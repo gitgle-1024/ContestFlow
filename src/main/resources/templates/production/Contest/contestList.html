@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="title='赛事列表'"
+      xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
+<!--head-->
+<header th:replace="~{production/Commons/header::headerFragment(${title})}"></header>
+<!--head-->
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+        <!-- menu_main -->
+        <div th:replace="~{production/Commons/common::menu_main}"></div>
+        <!-- menu_main-->
+
+        <!-- top navigation -->
+        <div th:replace="~{production/Commons/common::top_navigation}"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Contest
+                            <small>赛事表</small>
+                        </h3>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+                          <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>赛事表
+                                    <small>Contest</small>
+                                </h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                           aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Settings 1</a>
+                                            </li>
+                                            <li><a href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <p class="text-muted font-13 m-b-30">
+
+                                </p>
+                                <p>
+                                    <button id="printBtn" class="btn btn-default " type="button" th:onclick="windowprint()"><span
+                                            class="glyphicon glyphicon-print"></span> 打印
+                                    </button>
+<!--                                    <button id="dowloadBtn" class="btn btn-default " type="button"><span-->
+<!--                                            class="glyphicon glyphicon-save"></span> excel下载-->
+<!--                                    </button>-->
+<!--                                    <button id="dowloadpdfBtn" class="btn btn-default " type="button"><span-->
+<!--                                            class="glyphicon glyphicon-save-file"></span> pdf下载-->
+<!--                                    </button>   -->
+                                    <button id="refreshBt" class="btn btn-default " type="button" th:onclick="refresh()"><i
+                                            class="glyphicon glyphicon-refresh"></i> 刷新
+                                    </button>
+<!--                                    shiro:lacksPermission="contests"-->
+                                    <a id="mycontest" class="btn btn-default " type="button" th:href="@{/contest/getContestsByUid(id=${session.IndexDto.getUid()},type=${session.IndexDto.getType()})}"><i
+                                            class="glyphicon glyphicon-pawn"></i> 查看我的赛事
+                                    </a>
+                                </p>
+
+                                <!-- start 普通用户 select-->
+                                <form shiro:lacksPermission="contests" class="layui-form  form-horizontal">
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">赛事级别：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="contestlevel" class="layui-input">
+                                                <option value="">请选择</option>
+                                                <option value="world">国际级</option>
+                                                <option value="nation">国家级</option>
+                                                <option value="province">省部级级</option>
+                                                <option value="college">校级</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">赛事类型：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="contesttype" class="layui-input">
+                                                <option value="">请选择</option>
+                                                <option value="单人赛">单人赛</option>
+                                                <option value="组队赛">组队赛</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">分页大小：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="pagesize"  class="layui-input">
+                                                <option value="">--分页大小--</option>
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">报名分类：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="signup"  class="layui-input">
+                                                <option value="all">--显示全部--</option>
+                                                <option value="signed">已报名</option>
+                                                <option value="all">全部</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- End select-->
+
+                                <!-- start 管理用户 select-->
+                                <form shiro:hasPermission="contests" class="layui-form  form-horizontal">
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">赛事级别：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="contestlevel_admin" class="layui-input">
+                                                <option value="">请选择</option>
+                                                <option value="world">国际级</option>
+                                                <option value="nation">国家级</option>
+                                                <option value="province">省部级级</option>
+                                                <option value="college">校级</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">赛事类型：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="contesttype_admin" class="layui-input">
+                                                <option value="">请选择</option>
+                                                <option value="单人赛">单人赛</option>
+                                                <option value="组队赛">组队赛</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-input-inline">分页大小：</label>
+                                        <div class="layui-input-block">
+                                            <select name="" lay-filter="pagesize_admin"  class="layui-input">
+                                                <option value="">--分页大小--</option>
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- End select-->
+                                <!--分页-->
+                                <!--分页 普通用户-->
+                                <div shiro:lacksPermission="contests" style="display: block;
+                                        width: 710px;
+                                        height: 40px;
+                                        line-height: 40px;
+                                        padding-left: 0px;
+                                        padding: 5px 5px 5px 15px;
+                                        border-radius: 3px;
+                                        margin: 20px auto 40px auto !important;
+                                        text-align: center;">
+
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=1,pageSize=10)}">前一页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #EE9C54;color: #fff;"><span th:text="第+${pageInfo.pageNum}+页" ></span></a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList}">首页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getPrePage()})}">前一页</a></li>
+
+                                        <li th:each="num:${pageInfo.navigatepageNums}" class="page-item">
+                                            <a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${num})}" th:text="${num}"></a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getNextPage()})}">下一页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.pages})}">尾页</a></li>
+                                    </ul>
+                                </div>
+                                <!--分页-->
+                                <!--分页 管理用户-->
+                                <div shiro:hasPermission="contests" style="display: block;
+                                        width: 710px;
+                                        height: 40px;
+                                        line-height: 40px;
+                                        padding-left: 0px;
+                                        padding: 5px 5px 5px 15px;
+                                        border-radius: 3px;
+                                        margin: 20px auto 40px auto !important;
+                                        text-align: center;">
+
+                                    <ul class="pagination">
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=1,pageSize=10,isEnabled=1)}">前一页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #EE9C54;color: #fff;"><span th:text="第+${pageInfo.pageNum}+页" ></span></a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(isEnabled=1)}">首页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getPrePage()},isEnabled=1)}">前一页</a></li>
+
+                                        <li th:each="num:${pageInfo.navigatepageNums}" class="page-item">
+                                            <a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${num},isEnabled=1)}" th:text="${num}"></a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getNextPage()},isEnabled=1)}">下一页</a></li>
+                                        <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.pages},isEnabled=1)}">尾页</a></li>
+                                    </ul>
+                                </div>
+                                <!--分页-->
+
+
+                                <div class="" >
+                                    <!--class="dashboard-widget-content"-->
+                                    <div  id = "contestpage">
+                                        <ul class="list-unstyled timeline">
+                                            <li th:each="item:${pageInfo.list}">
+
+                                                <div class="block">
+                                                    <div class="tags">
+                                                        <a href="" class="tag" style="font-size: 15px;" th:each="tag:${item.getTags()}">
+                                                            <span class="fa fa-tag" th:text="${tag}"></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="block_content">
+                                                        <h2 class="title" ><label style="color: #ee39e5" th:text="${item.getTitle()}"></label></h2>
+                                                        <div class="byline">
+                                                            <label><i class="glyphicon glyphicon-calendar" style="color: #a6ecee"></i><span style="color: #e93e0b;" th:text="${item.getStartTime()}"> </span></label>
+                                                            <label style="color: #1eca21;"> <i class="fa fa-hand-o-left"></i> 开始时间</label>
+                                                            <label style="color: #1eca21;">结束时间 <i class="fa fa-hand-o-right"></i> </label>
+                                                            <label><i class="glyphicon glyphicon-calendar" style="color: #a6ecee"></i><span style="color: #e93e0b;" th:text="${item.getEndTime()}"> </span></label>
+                                                        </div>
+                                                        <p class="excerpt">
+                                                        <ul>
+                                                            <li >
+                                                                <label><i class="glyphicon glyphicon-bookmark" style="color: #eee32f"></i>序号:<span th:text="${item.getCid()}"></span> </label>
+                                                            </li>
+                                                            <li >
+                                                                <label><i class="glyphicon glyphicon-time" style="color: #eeb95f"></i>时长: <span th:text="${item.getLength()}"></span></label>
+                                                            </li>
+                                                            <li >
+                                                                <label th:switch="${item.getLevel()}"><i class="fa fa-sitemap"></i>级别:
+                                                                    <span th:case="world" >国际级</span>
+                                                                    <span th:case="nation" >国家级</span>
+                                                                    <span th:case="province" >省级</span>
+                                                                    <span th:case="college" >校级</span>
+                                                                </label>
+                                                            </li>
+                                                            <li th:switch="${item.getIsEnabled()}">
+                                                                <label><i class="fa fa-toggle-on"></i>状态:</label>
+                                                                <input th:case="1" type="checkbox" class="js-switch" checked />
+                                                                <input th:case="0" type="checkbox" class="js-switch" />
+                                                            </li>
+                                                            <li >
+                                                                <label><i class=" fa fa-soccer-ball-o (alias)"></i>类别: <span th:text="${item.getType()}"></span></label>
+                                                            </li>
+                                                        </ul>
+                                                        </p>
+<!--                                                        shiro:lacksPermission="contests"-->
+                                                        <a  class="btn btn-success" th:onclick="sign([[${item.getCid()}]],[[${session.IndexDto.uid}]],[[${session.IndexDto.getType()}]],[[${item.getType()}]])">
+                                                            <i class="glyphicon glyphicon-check" > 报名</i>
+                                                        </a>
+                                                        <a shiro:hasPermission="contests" class="btn btn-default" th:onclick="edit([[${item}]])">
+                                                            <i class="glyphicon glyphicon-edit"> 编辑</i>
+                                                        </a>
+                                                        <a shiro:hasPermission="contests" class="btn btn-default" th:onclick="del([[${item.getCid()}]],[[${item.getTitle()}]])">
+                                                            <i class="glyphicon glyphicon-trash"> 删除</i>
+                                                        </a>
+                                                        <a shiro:hasPermission="contests" id="infolist" class="btn btn-default "
+                                                           th:href="@{/admin/contest/toMemberListPage(type=${item.getType()},cid=${item.getCid()})}">
+                                                            <i class="glyphicon glyphicon-search"></i> 查看已报名人员
+
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!--分页-->
+                                    <!--分页 普通用户-->
+                                    <div shiro:lacksPermission="contests" style="display: block;
+                                        width: 710px;
+                                        height: 40px;
+                                        line-height: 40px;
+                                        padding-left: 0px;
+                                        padding: 5px 5px 5px 15px;
+                                        border-radius: 3px;
+                                        margin: 20px auto 40px auto !important;
+                                        text-align: center;">
+
+                                        <ul class="pagination">
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=1,pageSize=10)}">前一页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #EE9C54;color: #fff;"><span th:text="第+${pageInfo.pageNum}+页" ></span></a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList}">首页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getPrePage()})}">前一页</a></li>
+
+                                            <li th:each="num:${pageInfo.navigatepageNums}" class="page-item">
+                                                <a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${num})}" th:text="${num}"></a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getNextPage()})}">下一页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.pages})}">尾页</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--分页-->
+                                    <!--分页 管理用户-->
+                                    <div shiro:hasPermission="contests" style="display: block;
+                                        width: 710px;
+                                        height: 40px;
+                                        line-height: 40px;
+                                        padding-left: 0px;
+                                        padding: 5px 5px 5px 15px;
+                                        border-radius: 3px;
+                                        margin: 20px auto 40px auto !important;
+                                        text-align: center;">
+
+                                        <ul class="pagination">
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=1,pageSize=10,isEnabled=1)}">前一页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #EE9C54;color: #fff;"><span th:text="第+${pageInfo.pageNum}+页" ></span></a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(isEnabled=1)}">首页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getPrePage()},isEnabled=1)}">前一页</a></li>
+
+                                            <li th:each="num:${pageInfo.navigatepageNums}" class="page-item">
+                                                <a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${num},isEnabled=1)}" th:text="${num}"></a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" style="background: #a6dcee;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.getNextPage()},isEnabled=1)}">下一页</a></li>
+                                            <li class="page-item"><a class="page-link" style="background: #ee98ec;color: #fff;" th:href="@{/contest/toContestList(pageNum=${pageInfo.pages},isEnabled=1)}">尾页</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--分页-->
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="eidtContest" class="layer_self_wrap" style="width:500px;display:none;">
+                        <form id="ContestForm" class="layui-form" novalidate >
+                            <input type="hidden" id="flag" name="flag">
+                            <input id="Cid" name="Cid" type="hidden"  >
+                            <div class=" layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Title">标题 <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input  id="Title" class="form-control col-md-7 col-xs-12"  name="Title"  type="text" required lay-verify="required">
+                                </div>
+                            </div>
+                            <div class=" layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Memo">注释 <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="Memo"  id="Memo" name="Memo"  class="form-control col-md-7 col-xs-12" required lay-verify="required">
+                                </div>
+                            </div>
+                            <div class=" layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="StartTime">开始日期: <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input  type="text"  id="StartTime" name="StartTime"  class="form-control col-md-7 col-xs-12" required lay-verify="required">
+                                </div>
+                            </div>
+                            <div class=" layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="EndTime">结束时间: <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input  id="EndTime" type="text" name="EndTime"  class="optional form-control col-md-7 col-xs-12" required lay-verify="required">
+                                </div>
+                            </div>
+
+                            <div class=" layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12 ">是否启用: </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        <input  id="isEnabled" type="checkbox" lay-skin="switch" lay-text="启用|关闭" checked>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">赛事类型</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 " >
+                                    <select id="Type" name="Type" lay-verify="required" lay-filter="type_select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item item">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">赛事级别</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 " >
+                                    <select id="Level" name="Level" lay-verify="required" lay-filter="level_select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="item control-group form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">标签: </label>
+                                <div class="col-md-7 col-sm-9 col-xs-12">
+                                    <input id="tags_1" type="text"  name="Tag" class="tags form-control"  value="" />
+                                    <div id="suggestions-container" style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                                </div>
+                            </div>
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-md-offset-3" id ="buttons">
+                                    <button id ="reset" type="reset" class="layui-btn layui-btn-primary layui-btn-radius btn">重置</button>
+                                    <button id="send" class="btn-round btn btn-success" lay-submit lay-filter="ContestSumbit">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer th:replace="~{production/Commons/common::footer_content}"></footer>
+        <!-- /footer content -->
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap -->
+<script th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+<!-- NProgress -->
+<script th:src="@{/vendors/nprogress/nprogress.js}"></script>
+<!-- validator -->
+<script th:src="@{/vendors/validator/validator.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+<!--layui-->
+<script th:src="@{/vendors/layui/layui.js}"></script>
+
+<!-- jQuery Tags Input-->
+<script th:src="@{/vendors/jquery.tagsinput/src/jquery.tagsinput.js}"></script>
+
+<!-- Switchery -->
+<script th:src="@{/vendors/switchery/dist/switchery.min.js}"></script>
+
+<!--pdfmake-->
+<script th:src="@{vendors/pdfmake/pdfmake.js}"></script>
+<script th:src="@{vendors/pdfmake/vfs_fonts.js}"></script>
+
+
+<!-- Datatables -->
+<script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.flash.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.html5.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-buttons/js/buttons.print.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+<script th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+<script th:src="@{/vendors/datatables.net-scroller/js/dataTables.scroller.min.js}"></script>
+<script th:src="@{/vendors/jszip/dist/jszip.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/pdfmake.min.js}"></script>
+<script th:src="@{/vendors/pdfmake/build/vfs_fonts.js}"></script>
+
+
+<!-- Custom Theme Scripts -->
+<script th:src="@{/build/js/custom.min.js}"></script>
+
+<script th:src="@{/src/js/contest/contest.js}"></script>
+
+<script>
+
+    function windowprint() {
+
+        var f = document.getElementById("contestpage");
+        f.style.display = "";
+        window.print();
+        f.style.display = "none";
+    }
+    function refresh()
+    {
+        window.location.reload();
+    }
+
+</script>
+</body>
+</html>
