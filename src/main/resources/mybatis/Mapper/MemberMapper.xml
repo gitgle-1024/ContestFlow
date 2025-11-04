@@ -22,7 +22,7 @@
     </resultMap>
     <!--动态SQL插入-->
     <insert id="AddOneMember" parameterType="com.sizaif.emsdemo.pojo.User.Member" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO saishiguanli.member
+        INSERT INTO member
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -108,11 +108,11 @@
     </insert>
 
     <select id="QueryAllMemberInfo" resultMap="MemberBaseMap">
-        SELECT saishiguanli.member.* FROM saishiguanli.member
+        SELECT member.* FROM member
     </select>
 
     <select id="QueryOneMemberInfoByID" resultMap="MemberBaseMap" parameterType="int">
-        SELECT saishiguanli.member.* FROM  saishiguanli.member
+        SELECT member.* FROM  member
         WHERE
         <if test ="id !=null">
             id = #{id}
@@ -121,7 +121,7 @@
     </select>
 
     <select id="QueryMemberInfoByEmailOrPhone" resultMap="MemberBaseMap" parameterType="com.sizaif.emsdemo.pojo.User.Member">
-        SELECT saishiguanli.member.* FROM  saishiguanli.member
+        SELECT member.* FROM  member
         WHERE
             <if test ="email !=null">
                 email = #{email}
@@ -133,7 +133,7 @@
 
     <!--动态SQL更新-->
     <update id="UpdateMemberSelective" parameterType="com.sizaif.emsdemo.pojo.User.Member" >
-        update saishiguanli.member
+        update member
         <trim prefix="set" suffixOverrides=",">
             <if test="age!=null and age !='' ">age=#{age},</if>
             <if test="weight!=null and weight !='' ">weight=#{weight},</if>
@@ -152,7 +152,7 @@
     </update>
 
     <delete id="DeleteOneMemberById" parameterType="int">
-        DELETE FROM saishiguanli.member WHERE id = #{id}
+        DELETE FROM member WHERE id = #{id}
     </delete>
 
     <!--映射表-->

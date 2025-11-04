@@ -25,7 +25,7 @@
 
 
     <insert id="insert" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestMemberkey" >
-        insert into saishiguanli.contest_member
+        insert into contest_member
           (contest_id, member_id,isEnabled)
         values
         (#{contestId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}),#{isEnabled,jdbcType=INTEGER})
@@ -33,7 +33,7 @@
 
     <!--动态insert-->
     <insert id="insertSelective" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestMemberkey" >
-        insert into saishiguanli.contest_member
+        insert into contest_member
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="contestId != null" >
                 contest_id,
@@ -72,18 +72,18 @@
 
     <select id="findByMember" resultMap="BaseResultMap" parameterType="int">
         SELECT contest_id,member_id,isEnabled
-        FROM saishiguanli.contest_member
+        FROM contest_member
         WHERE member_id = #{memberId}
     </select>
 
     <select id="findByContest" resultMap="BaseResultMap" parameterType="int">
         SELECT contest_id,member_id,isEnabled
-        FROM saishiguanli.contest_member
+        FROM contest_member
         WHERE contest_id = #{contestId}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestMemberkey" >
-        delete from saishiguanli.contest_member
+        delete from contest_member
         where contest_id = #{contestId,jdbcType=INTEGER}
         and member_id = #{memberId,jdbcType=INTEGER}
     </delete>

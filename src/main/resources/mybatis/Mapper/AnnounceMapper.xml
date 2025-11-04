@@ -94,7 +94,7 @@
         </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="com.sizaif.emsdemo.pojo.Announce.Announce">
-       delete from saishiguanli.announce
+       delete from announce
         where id = #{id}
     </delete>
 </mapper>

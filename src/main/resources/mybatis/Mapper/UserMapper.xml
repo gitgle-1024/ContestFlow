@@ -103,7 +103,7 @@
     
     <select id="queryAllUserList" resultMap="UsersMap">
         SELECT
-          saishiguanli.users.*
+          users.*
         FROM
           users
     </select>
@@ -133,7 +133,7 @@
 
     <select id="queryOneUserById" resultMap="UsersMap">
         SELECT
-          saishiguanli.users.*
+          users.*
         FROM
           users
         WHERE users.id = #{id}
@@ -141,15 +141,15 @@
 
 
     <select id="queryUserByName"  parameterType="java.lang.String" resultMap="UsersMap">
-        SELECT saishiguanli.users.* FROM saishiguanli.users
+        SELECT users.* FROM users
         WHERE
-          saishiguanli.users.uname = #{name};
+          users.uname = #{name};
     </select>
 
     <!--动态sql插入-->
     <!--keyColum-数据库中主键名称, keyProperty-实体类中主键名称,useGeneratedKeys="true" 拿到主键-->
     <insert id="addUserSelective" parameterType="com.sizaif.emsdemo.pojo.User.Users" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO saishiguanli.users
+        INSERT INTO users
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="createDate != null">
                 createDate,
@@ -225,7 +225,7 @@
 
     <!--动态sql更新User-->
     <update id="updateUserSelective" parameterType="com.sizaif.emsdemo.pojo.User.Users" >
-        update saishiguanli.users
+        update users
         <trim prefix="set" suffixOverrides=",">
             <if test="createDate != null">createDate=#{createDate},</if>
             <if test="modifyDate != null">modifyDate=#{modifyDate},</if>
@@ -244,7 +244,7 @@
 
     <!--删除用户By ID-->
     <delete id="deleteUserById" parameterType="int">
-        delete from saishiguanli.users where id= #{id}
+        delete from users where id= #{id}
     </delete>
 
 

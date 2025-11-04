@@ -21,13 +21,13 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select
         <include refid="Base_Column_List" />
-        from saishiguanli.team
+        from team
         where id = #{id}
     </select>
 
     <!--动态插入-->
     <insert id="insertSelective" parameterType="Team" >
-        insert into saishiguanli.team
+        insert into team
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
@@ -78,7 +78,7 @@
 
     <!--动态更新-->
     <update id="updateByPrimaryKeySelective" parameterType="Team" >
-        update saishiguanli.team
+        update team
         <set >
             <if test="name != null" >
                 name = #{name},
@@ -108,10 +108,10 @@
     <select id="getAllTeam" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from saishiguanli.team
+        from team
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-        delete from saishiguanli.team
+        delete from team
         where id = #{id}
     </delete>
 
@@ -185,9 +185,9 @@
         m.truename m_truename,
         m.school m_school,
         m.image m_image
-        FROM saishiguanli.team t
-        LEFT JOIN saishiguanli.team_member tm ON tm.team_id = t.id
-        LEFT JOIN saishiguanli.member m ON m.id = tm.member_id
+        FROM team t
+        LEFT JOIN team_member tm ON tm.team_id = t.id
+        LEFT JOIN member m ON m.id = tm.member_id
         WHERE t.id  = #{teamid}
     </select>
     <!--=End getUserPerms 根据用户ID查找权限树列表-->

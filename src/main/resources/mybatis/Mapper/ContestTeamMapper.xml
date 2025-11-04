@@ -20,14 +20,14 @@
         AND contest_team.team_id= #{teamId};
     </select>
     <select id="getCTByisEnabled" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestTeamKey" resultMap="BaseResultMap">
-        SELECT  saishiguanli.contest_team.*
-        FROM saishiguanli.contest_team
-        WHERE saishiguanli.contest_team.isEnabled = #{isEnabled}
+        SELECT  contest_team.*
+        FROM contest_team
+        WHERE contest_team.isEnabled = #{isEnabled}
     </select>
 
 
     <insert id="insert" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestTeamKey" >
-        insert into saishiguanli.contest_team
+        insert into contest_team
           (contest_id, team_id,isEnabled)
         values
         (#{contestId,jdbcType=INTEGER}, #{teamId,jdbcType=INTEGER}),#{isEnabled,jdbcType=INTEGER})
@@ -35,7 +35,7 @@
 
     <!--动态insert-->
     <insert id="insertSelective" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestTeamKey" >
-        insert into saishiguanli.contest_team
+        insert into contest_team
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="contestId != null" >
                 contest_id,
@@ -73,18 +73,18 @@
     </update>
     <select id="findByteam" resultMap="BaseResultMap" parameterType="int">
         SELECT contest_id,team_id,isEnabled
-        FROM saishiguanli.contest_team
+        FROM contest_team
         WHERE team_id = #{teamId}
     </select>
 
     <select id="findByContest" resultMap="BaseResultMap" parameterType="int">
         SELECT contest_id,team_id,isEnabled
-        FROM saishiguanli.contest_team
+        FROM contest_team
         WHERE contest_id = #{contestId}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="com.sizaif.emsdemo.pojo.Contest.ContestTeamKey" >
-        delete from saishiguanli.contest_team
+        delete from contest_team
         where contest_id = #{contestId,jdbcType=INTEGER}
         and team_id = #{teamId,jdbcType=INTEGER}
     </delete>

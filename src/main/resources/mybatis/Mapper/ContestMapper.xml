@@ -28,12 +28,12 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select
         <include refid="Base_Column_List" />
-        from saishiguanli.contest
+        from contest
         where cid = #{id,jdbcType=INTEGER}
     </select>
     <!--动态插入-->
     <insert id="insertSelective" parameterType="Contest" >
-        insert into saishiguanli.contest
+        insert into contest
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="Cid != null" >
                 cid,
@@ -120,7 +120,7 @@
 
     <!--动态更新-->
     <update id="updateByPrimaryKeySelective" parameterType="Contest" >
-        update saishiguanli.contest
+        update contest
         <set >
             <if test="Title != null" >
                 title = #{Title},
@@ -166,7 +166,7 @@
     <select id="getAllContest" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from saishiguanli.contest
+        from contest
     </select>
 
     <!--contestVO 映射表-->
@@ -194,16 +194,16 @@
             WHERE contest.level = #{level}
         </if>
         <if test="type != null" >
-            WHERE saishiguanli.contest.type = #{type}
+            WHERE contest.type = #{type}
         </if>
         <if test="isEnabled != null" >
-            WHERE  saishiguanli.contest.isEnabled = #{isEnabled}
+            WHERE  contest.isEnabled = #{isEnabled}
         </if>
     </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-        delete from saishiguanli.contest
+        delete from contest
         where Cid = #{id}
     </delete>
 
@@ -274,9 +274,9 @@
         m.truename m_truename,
         m.school m_school,
         cm.isEnabled c_Enabled
-        FROM saishiguanli.contest c
-        LEFT JOIN saishiguanli.contest_member cm ON cm.contest_id = c.cid
-        LEFT JOIN saishiguanli.member m ON m.id = cm.member_id
+        FROM contest c
+        LEFT JOIN contest_member cm ON cm.contest_id = c.cid
+        LEFT JOIN member m ON m.id = cm.member_id
         WHERE m.id = #{id}
         AND c.isEnabled = true
     </select>
@@ -291,9 +291,9 @@
         t.name t_name,
         t.school t_school,
         ct.isEnabled c_Enabled
-        FROM saishiguanli.contest c
-        LEFT JOIN saishiguanli.contest_team ct ON ct.contest_id = c.cid
-        LEFT JOIN saishiguanli.team t ON t.id = ct.team_id
+        FROM contest c
+        LEFT JOIN contest_team ct ON ct.contest_id = c.cid
+        LEFT JOIN team t ON t.id = ct.team_id
         WHERE t.id = #{id}
         AND c.isEnabled = true
     </select>
@@ -309,9 +309,9 @@
         m.truename m_truename,
         m.school m_school,
         cm.isEnabled m_isEnabled
-        FROM saishiguanli.contest c
-        LEFT JOIN saishiguanli.contest_member cm ON cm.contest_id = c.cid
-        LEFT JOIN saishiguanli.member m ON m.id = cm.member_id
+        FROM contest c
+        LEFT JOIN contest_member cm ON cm.contest_id = c.cid
+        LEFT JOIN member m ON m.id = cm.member_id
         WHERE c.cid = #{id}
     </select>
     
@@ -325,9 +325,9 @@
         t.name t_name,
         t.school t_school,
         ct.isEnabled t_Enabled
-        FROM saishiguanli.contest c
-        LEFT JOIN saishiguanli.contest_team ct ON ct.contest_id = c.cid
-        LEFT JOIN saishiguanli.team t ON t.id = ct.team_id
+        FROM contest c
+        LEFT JOIN contest_team ct ON ct.contest_id = c.cid
+        LEFT JOIN team t ON t.id = ct.team_id
         WHERE c.cid = #{id}
     </select>
 </mapper>
